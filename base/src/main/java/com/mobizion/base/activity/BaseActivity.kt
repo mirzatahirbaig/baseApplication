@@ -1,0 +1,105 @@
+/**
+ * created by tahir baig
+ * 3 march 2022
+ */
+package com.mobizion.base.activity
+
+import android.Manifest
+import android.content.Context
+import android.graphics.Rect
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LiveData
+import androidx.viewbinding.ViewBinding
+import com.mobizion.base.view.model.BaseViewModel
+import com.mobizion.base.view.model.PermissionsViewModel
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.lang.reflect.ParameterizedType
+import kotlin.reflect.KClass
+
+abstract class BaseActivity<B:ViewBinding>(val bindingFactory: (LayoutInflater) -> B):AppCompatActivity() {
+
+    val permissionViewModel by inject<PermissionsViewModel>()
+
+    private val contactPermission = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){ granted ->
+        permissionViewModel.setContactPermissionStatus(granted[Manifest.permission.READ_CONTACTS] == true && granted[Manifest.permission.WRITE_CONTACTS] == true)
+    }
+
+    private val cameraPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()){ granted ->
+        permissionViewModel.setCameraPermissionStatus(granted)
+    }
+
+    private val storagePermission = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){ granted ->
+        permissionViewModel.setStoragePermissionStatus(granted[Manifest.permission.READ_EXTERNAL_STORAGE] == true && granted[Manifest.permission.WRITE_EXTERNAL_STORAGE] == true)
+    }
+
+    private val microphoneAccessPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()){ granted ->
+        permissionViewModel.setMicrophonePermissionStatus(granted)
+    }
+
+    private val locationAccessPermission = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){ granted ->
+        permissionViewModel.setLocationPermissionStatus(granted)
+    }
+
+    val binding:B  by lazy { bindingFactory(layoutInflater) }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(binding.root)
+        initViews()
+    }
+
+    abstract fun shouldHideKeyboard():Boolean
+
+    abstract fun initViews()
+
+    fun launchStoragePermission(){
+        storagePermission.launch(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE))
+    }
+
+    fun launchMicroPhonePermission(){
+        microphoneAccessPermission.launch(Manifest.permission.RECORD_AUDIO)
+    }
+
+    fun launchContactPermission(){
+        contactPermission.launch(arrayOf(Manifest.permission.READ_CONTACTS,Manifest.permission.WRITE_CONTACTS))
+    }
+
+    fun launchCameraPermission(){
+        cameraPermission.launch(Manifest.permission.CAMERA)
+    }
+
+    fun launchLocationPermission(){
+        locationAccessPermission.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION))
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        if (shouldHideKeyboard()){
+            if (ev?.action == MotionEvent.ACTION_DOWN) {
+                val v: View? = currentFocus
+                if (v is EditText) {
+                    val outRect = Rect()
+                    v.getGlobalVisibleRect(outRect)
+                    if (!outRect.contains(ev.rawX.toInt(), ev.rawY.toInt())) {
+                        v.clearFocus()
+                        val imm =
+                            getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0)
+                    }
+                }
+            }
+        }
+        return super.dispatchTouchEvent(ev)
+    }
+
+    fun <T> LiveData<T>.observe(onChanged: (T) -> Unit) {
+        observe(this@BaseActivity, onChanged)
+    }
+}

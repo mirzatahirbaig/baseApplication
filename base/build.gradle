@@ -1,0 +1,80 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'maven-publish'
+}
+
+android {
+    compileSdk 31
+
+    defaultConfig {
+        minSdk 21
+        targetSdk 31
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures{
+        viewBinding true
+    }
+    lintOptions {
+        abortOnError false
+    }
+}
+
+dependencies {
+
+    implementation "androidx.core:core-ktx:$rootProject.core_version"
+    testImplementation "junit:junit:$rootProject.junit_version"
+    implementation "androidx.legacy:legacy-support-v4:$rootProject.legacy_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutines_version"
+    implementation "androidx.core:core-ktx:$rootProject.core_version"
+    implementation "androidx.appcompat:appcompat:$rootProject.app_compact_version"
+    implementation "com.google.android.material:material:$rootProject.material_version"
+    implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraint_version"
+    implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$rootProject.retrofit_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.interceptor_version"
+    implementation("org.jetbrains.kotlin:kotlin-reflect:$rootProject.reflect_version")
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutines_version"
+    implementation("androidx.room:room-runtime:$rootProject.room_version")
+    annotationProcessor "androidx.room:room-compiler:$rootProject.room_version"
+    // To use Kotlin annotation processing tool (kapt)
+    kapt("androidx.room:room-compiler:$rootProject.room_version")
+    // optional - Kotlin Extensions and Coroutines support for Room
+    implementation("androidx.room:room-ktx:$rootProject.room_version")
+    implementation "io.insert-koin:koin-core:$rootProject.koin_version"
+    // Koin Test features
+    testImplementation "io.insert-koin:koin-test:$rootProject.koin_version"
+    implementation "io.insert-koin:koin-android:$koin_version"
+    androidTestImplementation "androidx.test.ext:junit:$rootProject.test_junit_version"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.expresso_version"
+}
+
+afterEvaluate {
+    publishing{
+        publications{
+            release(MavenPublication){
+                from components.release
+                groupId = 'com.github.mirzatahirbaig'
+                artifactId = 'base_module'
+                version = '1.0'
+            }
+        }
+    }
+}
