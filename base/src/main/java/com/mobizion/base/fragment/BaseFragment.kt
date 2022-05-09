@@ -15,7 +15,8 @@ import androidx.viewbinding.ViewBinding
 import com.mobizion.base.view.model.PermissionsViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-abstract class BaseFragment<B: ViewBinding>(val bindingFactory: (LayoutInflater,ViewGroup?,Boolean) -> B): Fragment() {
+abstract class BaseFragment<B : ViewBinding>(val bindingFactory: (LayoutInflater, ViewGroup?, Boolean) -> B) :
+    Fragment() {
 
     lateinit var binding: B
     lateinit var mInflater: LayoutInflater
@@ -33,11 +34,11 @@ abstract class BaseFragment<B: ViewBinding>(val bindingFactory: (LayoutInflater,
         savedInstanceState: Bundle?
     ): View? {
         mInflater = inflater
-        binding = bindingFactory(inflater,container,false)
+        binding = bindingFactory(inflater, container, false)
         return binding.root
     }
 
-    protected open fun registerBackPress(){
+    protected open fun registerBackPress() {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(enableBackPress() /* enabled by default */) {
                 override fun handleOnBackPressed() {
@@ -56,7 +57,7 @@ abstract class BaseFragment<B: ViewBinding>(val bindingFactory: (LayoutInflater,
 
     abstract fun backPressed(view: View)
 
-    abstract fun enableBackPress():Boolean
+    abstract fun enableBackPress(): Boolean
 
     fun <T> LiveData<T>.observe(onChanged: (T) -> Unit) {
         observe(viewLifecycleOwner, onChanged)
