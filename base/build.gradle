@@ -78,3 +78,17 @@ afterEvaluate {
         }
     }
 }
+
+
+task deleteJar(type: Delete) {
+    delete 'libs/base-sdk.jar'
+}
+
+task createJar(type: Copy) {
+    from('build/intermediates/aar_main_jar/release/')
+    into('libs/')
+    include('classes.jar')
+    rename('classes.jar', 'base-android-sdk.jar')
+}
+
+createJar.dependsOn(deleteJar, build)
