@@ -12,6 +12,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.viewbinding.ViewBinding
+import com.mobizion.base.dialog.LoadingDialog
 import com.mobizion.base.view.model.PermissionsViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -22,6 +23,8 @@ abstract class BaseFragment<B : ViewBinding>(val bindingFactory: (LayoutInflater
     lateinit var mInflater: LayoutInflater
 
     val permissionsViewModel by sharedViewModel<PermissionsViewModel>()
+
+    lateinit var loadingDialog: LoadingDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +38,7 @@ abstract class BaseFragment<B : ViewBinding>(val bindingFactory: (LayoutInflater
     ): View? {
         mInflater = inflater
         binding = bindingFactory(inflater, container, false)
+        loadingDialog = LoadingDialog(requireActivity())
         return binding.root
     }
 
@@ -55,7 +59,9 @@ abstract class BaseFragment<B : ViewBinding>(val bindingFactory: (LayoutInflater
 
     abstract fun onViewCreated()
 
-    abstract fun backPressed(view: View)
+    open fun backPressed(view: View){
+
+    }
 
     abstract fun enableBackPress(): Boolean
 

@@ -15,14 +15,27 @@ fun RecyclerView.setHorizontalLayoutManager() {
     this.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 }
 
+fun RecyclerView.setHorizontalLayoutManager(widthPercentage:Float,reverse:Boolean) {
+    this.layoutManager = object:LinearLayoutManager(context, HORIZONTAL, reverse){
+        override fun checkLayoutParams(lp: RecyclerView.LayoutParams?): Boolean {
+            lp?.let {
+                it.width = (width*widthPercentage).toInt()
+            }
+            return true
+        }
+    }
+}
+
 fun RecyclerView.setGridManager() {
     this.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
     val decoration = SpacesItemDecoration(5)
     this.addItemDecoration(decoration)
 }
 
-fun RecyclerView.setGridManager(spanCount: Int) {
+fun RecyclerView.setGridManager(spanCount: Int,space:Int) {
     this.layoutManager = StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL)
+    val decoration = SpacesItemDecoration(space)
+    this.addItemDecoration(decoration)
 }
 
 fun RecyclerView.setStackFromEndManager() {
