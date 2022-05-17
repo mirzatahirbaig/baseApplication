@@ -17,7 +17,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.viewbinding.ViewBinding
-import com.mobizion.base.dialog.LoadingDialog
 import com.mobizion.base.view.model.BaseViewModel
 import com.mobizion.base.view.model.PermissionsViewModel
 import org.koin.android.ext.android.inject
@@ -51,12 +50,9 @@ abstract class BaseActivity<B:ViewBinding>(val bindingFactory: (LayoutInflater) 
 
     val binding:B  by lazy { bindingFactory(layoutInflater) }
 
-    lateinit var loadingDialog: LoadingDialog
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        loadingDialog = LoadingDialog(this)
         initViews()
     }
 

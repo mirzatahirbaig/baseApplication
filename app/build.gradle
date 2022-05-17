@@ -37,8 +37,8 @@ android {
 
 dependencies {
 
+    implementation project(':base')
     implementation "androidx.core:core-ktx:$rootProject.core_version"
-    implementation files('libs/base-android-sdk.jar')
     testImplementation "junit:junit:$rootProject.junit_version"
     implementation "androidx.legacy:legacy-support-v4:$rootProject.legacy_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutines_version"
@@ -63,4 +63,5 @@ dependencies {
     implementation "io.insert-koin:koin-android:$koin_version"
     androidTestImplementation "androidx.test.ext:junit:$rootProject.test_junit_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.expresso_version"
+    implementation 'androidx.core:core-splashscreen:1.0.0-beta02'
 }
