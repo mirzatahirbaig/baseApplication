@@ -7,7 +7,9 @@ import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.net.Uri
 import com.mobizion.base.activity.BaseActivity
+import com.mobizion.base.enums.GradientTypes
 import com.mobizion.base.extension.dp
+import com.mobizion.base.utils.getGradientDrawable
 import com.mobizion.baseapplication.databinding.ActivityMainBinding
 import kotlin.reflect.full.declaredMemberProperties
 
@@ -16,12 +18,19 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     override fun shouldHideKeyboard() = false
 
     override fun initViews() {
-        val mainDrawable = com.mobizion.base.utils.getDrawable(
-            Color.WHITE,
-            topLeft = 20,
-            topRight = 20,
-            bottomRight = 20,
-            bottomLeft = 20,
+//        val mainDrawable = com.mobizion.base.utils.getDrawable(
+//            Color.WHITE,
+//            topLeft = 20,
+//            topRight = 20,
+//            bottomRight = 20,
+//            bottomLeft = 20,
+//        )
+        binding.txt.background = getGradientDrawable(
+            intArrayOf(
+                Color.WHITE,
+                Color.BLACK
+            ),
+            gradientType = GradientTypes.RADIAL_GRADIENT
         )
 //        val radii = floatArrayOf((20).dp.toFloat(), (20).dp.toFloat(), (20).dp.toFloat(), (20).dp.toFloat(), (20).dp.toFloat(), (20).dp.toFloat(), (20).dp.toFloat(), (20).dp.toFloat())
 //        val ss = Shadow(1, 100, "#FFBB86FC", GradientDrawable.RECTANGLE, radii, Shadow.Position.CENTER).getShadow()

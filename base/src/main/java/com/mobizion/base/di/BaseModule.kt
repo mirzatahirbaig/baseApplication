@@ -8,4 +8,5 @@ val baseModule = module {
     viewModel {
         PermissionsViewModel()
     }
+
 }

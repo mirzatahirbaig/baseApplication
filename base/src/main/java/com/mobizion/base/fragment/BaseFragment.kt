@@ -4,6 +4,7 @@
  */
 package com.mobizion.base.fragment
 
+import android.app.Fragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -54,11 +55,11 @@ abstract class BaseFragment<B : ViewBinding>(val bindingFactory: (LayoutInflater
         onViewCreated()
     }
 
-    abstract fun onViewCreated()
-
     open fun backPressed(view: View){
 
     }
+
+    abstract fun onViewCreated()
 
     abstract fun enableBackPress(): Boolean
 
