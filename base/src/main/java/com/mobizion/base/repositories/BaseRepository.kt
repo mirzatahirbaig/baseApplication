@@ -28,20 +28,30 @@ abstract class BaseRepository {
     }
 
     private fun HttpException.parseException(): NetworkResponse.Failure{
-        response()?.let { errorResponse ->
-            errorResponse.errorBody()?.let { errorBody ->
-                val response = Gson().fromJson(errorBody.charStream(), APIError::class.java)
-                return NetworkResponse.Failure(
-                    true,
-                    response,
-                    response.message
-                )
-            }
-        }
-        return  NetworkResponse.Failure(
+        var errorResponse = NetworkResponse.Failure(
             true,
-            null,
-            "Unknown Exception Occurred"
+            APIError(
+                this.code(),
+                message()
+            ),
+            message()
         )
+        try {
+            response()?.let { response ->
+                response.errorBody()?.let { errorBody ->
+                    val apiError = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                    errorResponse = NetworkResponse.Failure(
+                        true,
+                        APIError(
+                            response.code(),
+                            apiError.message
+                        ),
+                        apiError.message
+                    )
+                }
+            }
+        }catch (exception:Exception){
+        }
+        return errorResponse
     }
 }

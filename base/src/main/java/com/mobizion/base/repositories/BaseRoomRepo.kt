@@ -6,8 +6,8 @@
 package com.mobizion.base.repositories
 
 interface BaseRoomRepo<T> {
-    suspend fun insert(value:T)
-    suspend fun insert(value:List<T>)
-    suspend fun update(value:T)
-    suspend fun delete(value:T)
+    suspend fun insert(value:T):Long
+    suspend fun insert(value:List<T>):List<Long>
+    suspend fun update(value:T):Int
+    suspend fun delete(value:T):Int
 }

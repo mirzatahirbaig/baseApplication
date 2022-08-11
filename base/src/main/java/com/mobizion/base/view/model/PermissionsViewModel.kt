@@ -5,6 +5,7 @@
 
 package com.mobizion.base.view.model
 
+import androidx.activity.result.ActivityResult
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -53,6 +54,28 @@ class PermissionsViewModel: ViewModel() {
 
     fun setMicrophonePermissionStatus(status: Boolean) {
         _microphonePermissionStatus.value = status
+    }
+
+    private val _multiplePermissionStatus: MutableLiveData<Map<String,Boolean>> by lazy {
+        MutableLiveData()
+    }
+
+    val multiplePermissionStatus: LiveData<Map<String,Boolean>>
+        get() = _multiplePermissionStatus
+
+    fun setMultiplePermissionStatus(status: Map<String,Boolean>) {
+        _multiplePermissionStatus.value = status
+    }
+
+    private val _activityResult: MutableLiveData<ActivityResult> by lazy {
+        MutableLiveData()
+    }
+
+    val activityResult: LiveData<ActivityResult>
+        get() = _activityResult
+
+    fun setActivityResult(result: ActivityResult) {
+        _activityResult.value = result
     }
 
 

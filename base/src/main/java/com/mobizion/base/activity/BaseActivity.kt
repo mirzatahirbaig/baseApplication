@@ -30,6 +30,14 @@ abstract class BaseActivity<B : ViewBinding>(val bindingFactory: (LayoutInflater
             permissionViewModel.setContactPermissionStatus(granted[Manifest.permission.READ_CONTACTS] == true && granted[Manifest.permission.WRITE_CONTACTS] == true)
         }
 
+    val requestMultiplePermission = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { granted ->
+        permissionViewModel.setMultiplePermissionStatus(granted)
+    }
+
+    val launchActivityForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        permissionViewModel.setActivityResult(result)
+    }
+
     private val cameraPermission =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
             permissionViewModel.setCameraPermissionStatus(granted)
