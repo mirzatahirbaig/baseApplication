@@ -7,10 +7,9 @@ package com.mobizion.base.activity
 import android.Manifest
 import android.content.Context
 import android.graphics.Rect
+import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
+import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.activity.result.contract.ActivityResultContracts
@@ -62,6 +61,19 @@ abstract class BaseActivity<B : ViewBinding>(val bindingFactory: (LayoutInflater
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if(shouldHideStatusBar()){
+                window.decorView.windowInsetsController!!.hide(
+                    WindowInsets.Type.statusBars()
+                )
+            }
+        }else{
+            if(shouldHideStatusBar()){
+                requestWindowFeature(Window.FEATURE_NO_TITLE);
+                window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            }
+        }
         setContentView(binding.root)
         initViews()
     }
@@ -69,6 +81,11 @@ abstract class BaseActivity<B : ViewBinding>(val bindingFactory: (LayoutInflater
     abstract fun shouldHideKeyboard(): Boolean
 
     abstract fun initViews()
+
+    open fun shouldHideStatusBar():Boolean{
+        return false
+    }
+
 
     fun launchStoragePermission() {
         storagePermission.launch(
