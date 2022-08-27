@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="checkBoxStyle" parent="Base.Theme.AppCompat">
+        <item name="colorAccent">#addf92</item>
+        <item name="android:textColorSecondary">#ebebeb</item>
+        <item name="android:button">@drawable/checkbox_unselected</item>
+    </style>
+</resources>
