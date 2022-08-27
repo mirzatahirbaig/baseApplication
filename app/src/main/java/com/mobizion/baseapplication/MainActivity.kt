@@ -1,6 +1,7 @@
 package com.mobizion.baseapplication
 
 import android.content.ContentResolver
+import android.content.Intent
 import android.database.ContentObserver
 import android.graphics.Color
 import android.net.Uri
@@ -10,6 +11,7 @@ import com.mobizion.base.extension.appHasPermission
 import com.mobizion.base.utils.getGradientDrawable
 import com.mobizion.base.view.model.PermissionsViewModel
 import com.mobizion.baseapplication.databinding.ActivityMainBinding
+import com.mobizion.camera.XCameraActivity
 import com.mobizion.gallary.enum.MediaType
 import com.mobizion.gallary.enum.SortOrder
 import com.mobizion.gallary.view.model.GalleryViewModel
@@ -26,6 +28,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     override fun initViews() {
         launchStoragePermission()
+        launchCameraPermission()
         permissionVm.storagePermissionStatus.observe {
             if (it){
                 vm.load(MediaType.IMAGES).observe {
@@ -40,6 +43,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             ),
             gradientType = GradientTypes.RADIAL_GRADIENT
         )
+        binding.openCamera.setOnClickListener {
+            permissionVm.cameraPermissionStatus.observe {
+                if (it){
+                    startActivity(Intent(this@MainActivity, XCameraActivity::class.java))
+                }
+            }
+
+        }
     }
 
     /**

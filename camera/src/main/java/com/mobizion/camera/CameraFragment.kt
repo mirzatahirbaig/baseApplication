@@ -418,7 +418,7 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(FragmentCameraBinding
     }
 
     override fun backPressed(view: View) {
-
+        requireActivity().finish()
     }
 
     override fun enableBackPress() = true
