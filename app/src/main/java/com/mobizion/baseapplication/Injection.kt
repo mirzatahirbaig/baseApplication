@@ -1,10 +1,14 @@
 package com.mobizion.baseapplication
 
 import com.mobizion.base.di.baseModule
+import com.mobizion.camera.CameraViewModel
+import com.mobizion.camera.XCameraActivity
+import com.mobizion.camera.abstract.CameraRepo
 import com.mobizion.gallary.repository.abstraction.GalleryRepository
 import com.mobizion.gallary.repository.implementation.GalleryRepoImpl
 import com.mobizion.gallary.view.model.GalleryViewModel
 import org.koin.android.ext.koin.androidApplication
+import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -18,11 +22,15 @@ val repos = module {
     single<GalleryRepository> {
         GalleryRepoImpl(androidApplication().contentResolver)
     }
+    single<CameraRepo>{
+        XCameraActivity()
+    }
 }
 
 val vms = module {
     viewModel {
         GalleryViewModel(get())
+        CameraViewModel(get())
     }
 }
 

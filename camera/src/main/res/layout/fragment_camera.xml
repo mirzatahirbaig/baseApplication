@@ -139,7 +139,7 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:layout_marginBottom="@dimen/_10sdp"
-                android:text="SEND"
+                android:text="Done"
                 android:textColor="#fff" />
 
         </RelativeLayout>

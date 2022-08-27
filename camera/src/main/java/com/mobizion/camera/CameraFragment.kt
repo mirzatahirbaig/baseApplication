@@ -10,6 +10,7 @@ import android.graphics.drawable.ColorDrawable
 import android.hardware.display.DisplayManager
 import android.net.Uri
 import android.os.Build
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.*
@@ -32,6 +33,10 @@ import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 import androidx.window.layout.WindowMetricsCalculator
+import com.mobizion.camera.abstract.CameraRepo
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CameraFragment : BaseFragment<FragmentCameraBinding>(FragmentCameraBinding::inflate) {
 
@@ -46,7 +51,7 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(FragmentCameraBinding
     private lateinit var cameraSelector:CameraSelector
     private var flashMode = false
     var isSubmitted = false
-
+    private val imageCaptureDoneViewModel: CameraViewModel by viewModel()
     private val displayManager by lazy {
         requireContext().getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
     }
@@ -276,7 +281,7 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(FragmentCameraBinding
             imageCapture?.let { imageCapture ->
 
                 // Create output file to hold the image
-                val photoFile = createFile(File(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-Image"))
+                val photoFile = createFile(File(requireContext().getDir(Environment.DIRECTORY_DOCUMENTS,Context.MODE_PRIVATE).absolutePath))
 
                 // Setup image capture metadata
                 val metadata = ImageCapture.Metadata().apply {
@@ -389,6 +394,10 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(FragmentCameraBinding
             }
 
         }
+        binding.txtSend.setOnClickListener {
+            imageCaptureDoneViewModel.capturedImageUri(Uri.fromFile(file))
+            requireActivity().finish()
+        }
     }
 
     /** Returns true if the device has an available back camera. False otherwise */
@@ -422,5 +431,4 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(FragmentCameraBinding
     }
 
     override fun enableBackPress() = true
-
 }

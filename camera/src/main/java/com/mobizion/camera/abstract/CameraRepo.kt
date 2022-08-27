@@ -4,5 +4,5 @@ import android.net.Uri
 import kotlinx.coroutines.flow.Flow
 
 interface CameraRepo {
-    fun getCameraFile(): Flow<Uri>
+    fun cameraCaptureImageUri(fileUri: Uri)
 }
