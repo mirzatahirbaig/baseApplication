@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color"
+
+    tools:context=".XFileManagerActivity">
+
+    <RelativeLayout
+        android:id="@+id/topBarRelative"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_45sdp"
+        android:layout_margin="@dimen/_4sdp"
+        android:background="@drawable/xpc_projects_topbar_no_shadow"
+        android:elevation="4dp">
+
+        <TextView
+            android:id="@+id/projectsTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/_18sdp"
+            android:fontFamily="@font/nunitosans_bold"
+            android:text="Your Projects"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_14ssp" />
+
+        <TextView
+            android:id="@+id/doneTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/_18sdp"
+            android:fontFamily="@font/nunitosans_bold"
+            android:gravity="center"
+            android:text="Done"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_14ssp" />
+    </RelativeLayout>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:layout_below="@+id/topBarRelative"
+        android:id="@+id/nav_host_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/manager_nav" />
+
+    <FrameLayout
+        android:id="@+id/addNewProject"
+        android:layout_width="@dimen/_55sdp"
+        android:layout_height="@dimen/_55sdp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="@dimen/_5sdp"
+        android:background="@drawable/xpc_add_new_project"
+        android:clickable="true"
+        android:focusable="true" />
+</RelativeLayout>
