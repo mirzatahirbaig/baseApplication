@@ -16,3 +16,4 @@ rootProject.name = "baseApplication"
 include ':app'
 include ':base'
 include ':gallary'
+include ':camera'
