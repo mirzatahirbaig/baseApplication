@@ -38,6 +38,7 @@ android {
 dependencies {
 
     implementation project(':base')
+    implementation project(':gallary')
     implementation "androidx.core:core-ktx:$rootProject.core_version"
     testImplementation "junit:junit:$rootProject.junit_version"
     implementation "androidx.legacy:legacy-support-v4:$rootProject.legacy_version"
