@@ -6,15 +6,33 @@ import android.graphics.Color
 import android.net.Uri
 import com.mobizion.base.activity.BaseActivity
 import com.mobizion.base.enums.GradientTypes
+import com.mobizion.base.extension.appHasPermission
 import com.mobizion.base.utils.getGradientDrawable
+import com.mobizion.base.view.model.PermissionsViewModel
 import com.mobizion.baseapplication.databinding.ActivityMainBinding
+import com.mobizion.gallary.enum.MediaType
+import com.mobizion.gallary.enum.SortOrder
+import com.mobizion.gallary.view.model.GalleryViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.reflect.full.declaredMemberProperties
 
 
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
+
+    val vm:GalleryViewModel by viewModel()
+    val permissionVm:PermissionsViewModel by viewModel()
+
     override fun shouldHideKeyboard() = false
 
     override fun initViews() {
+        launchStoragePermission()
+        permissionVm.storagePermissionStatus.observe {
+            if (it){
+                vm.load(MediaType.IMAGES).observe {
+                    val ss = it
+                }
+            }
+        }
         binding.txt.background = getGradientDrawable(
             intArrayOf(
                 Color.WHITE,
@@ -22,6 +40,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             ),
             gradientType = GradientTypes.RADIAL_GRADIENT
         )
+    }
+
+    /**
+     * we can load data of (images,videos,images and videos) with sort by date (is ascending or descending order)
+     */
+
+    private fun loadMediaData(){
+
+        vm.load(MediaType.IMAGES,SortOrder.DESC)
     }
 
     override fun shouldHideStatusBar() = false
