@@ -36,35 +36,6 @@ android {
 }
 
 dependencies {
-
     implementation project(':base')
     implementation project(':gallary')
-    implementation "androidx.core:core-ktx:$rootProject.core_version"
-    testImplementation "junit:junit:$rootProject.junit_version"
-    implementation "androidx.legacy:legacy-support-v4:$rootProject.legacy_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutines_version"
-    implementation "androidx.core:core-ktx:$rootProject.core_version"
-    implementation "androidx.appcompat:appcompat:$rootProject.app_compact_version"
-    implementation "com.google.android.material:material:$rootProject.material_version"
-    implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraint_version"
-    implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofit_version"
-    implementation "com.squareup.retrofit2:converter-gson:$rootProject.retrofit_version"
-    implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.interceptor_version"
-    implementation("org.jetbrains.kotlin:kotlin-reflect:$rootProject.reflect_version")
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutines_version"
-    implementation("androidx.room:room-runtime:$rootProject.room_version")
-    annotationProcessor "androidx.room:room-compiler:$rootProject.room_version"
-    // To use Kotlin annotation processing tool (kapt)
-    kapt("androidx.room:room-compiler:$rootProject.room_version")
-    // optional - Kotlin Extensions and Coroutines support for Room
-    implementation("androidx.room:room-ktx:$rootProject.room_version")
-    implementation "io.insert-koin:koin-core:$rootProject.koin_version"
-    // Koin Test features
-    testImplementation "io.insert-koin:koin-test:$rootProject.koin_version"
-    implementation "io.insert-koin:koin-android:$koin_version"
-    androidTestImplementation "androidx.test.ext:junit:$rootProject.test_junit_version"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.expresso_version"
-    implementation 'androidx.core:core-splashscreen:1.0.0-beta02'
-    api 'com.intuit.sdp:sdp-android:1.0.6'
-    api 'com.intuit.ssp:ssp-android:1.0.6'
 }
