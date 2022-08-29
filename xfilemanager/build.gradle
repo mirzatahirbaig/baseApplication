@@ -38,6 +38,7 @@ dependencies {
     api project(':xbase')
     api project(':xbaseadapter')
     api project(':xcommonlibs')
+    api project(':xResources')
     api 'androidx.navigation:navigation-fragment-ktx:2.5.1'
     api 'androidx.navigation:navigation-ui-ktx:2.5.1'
     api "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"

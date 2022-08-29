@@ -2,13 +2,16 @@ package com.xdevelopers.xfilemanager.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.mobizion.xbaseadapter.adapter.BaseListAdapter
 import com.mobizion.xbaseadapter.listeners.OnItemClickedListener
 import com.mobizion.xbaseadapter.viewholder.BaseViewHolder
 import com.xdevelopers.xfilemanager.ProjectDiffUtil
 import com.xdevelopers.xfilemanager.databinding.ProjectItemBinding
 import com.xdevelopers.xfilemanager.model.ProjectItemModel
+import com.xdevelopers.xresources.R
 
 class ProjectsAdapter(private val itemClickListener: OnItemClickedListener<ProjectItemModel>) :
     BaseListAdapter<ProjectItemModel, ProjectDiffUtil>(
@@ -37,6 +40,11 @@ class ProjectsAdapter(private val itemClickListener: OnItemClickedListener<Proje
         BaseViewHolder<ProjectItemBinding, ProjectItemModel>(binding) {
         override fun bind(item: ProjectItemModel, position: Int) {
             binding.projectNameTextView.text = item.title
+            if (item.isFile){
+                Glide.with(binding.root.context).asBitmap().load(item.filePath).into(binding.imageView)
+            }else{
+                binding.imageView.setImageDrawable(ContextCompat.getDrawable(binding.root.context, com.xdevelopers.xfilemanager.R.drawable.folder_image))
+            }
             binding.root.setOnClickListener {
                 itemClickListener.onItemClicked(item, position)
             }

@@ -123,7 +123,7 @@ class FileManager(private val context: Context): FileManagerRepo {
         val directories = mutableListOf<ProjectItemModel>()
         file.listFiles()?.let {
             for (f in it){
-                directories.add(ProjectItemModel(f.name, f.isFile))
+                directories.add(ProjectItemModel(f.name, f.isFile, Uri.fromFile(f)))
             }
         }
         return directories
