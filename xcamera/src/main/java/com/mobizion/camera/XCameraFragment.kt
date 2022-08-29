@@ -34,7 +34,7 @@ import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
-class CameraFragmentX : XBaseFragment<FragmentCameraBinding>(FragmentCameraBinding::inflate) {
+class XCameraFragment : XBaseFragment<FragmentCameraBinding>(FragmentCameraBinding::inflate) {
 
     private var lensFacing: Int = CameraSelector.LENS_FACING_FRONT
     private var preview: Preview? = null
@@ -77,7 +77,7 @@ class CameraFragmentX : XBaseFragment<FragmentCameraBinding>(FragmentCameraBindi
         override fun onDisplayAdded(displayId: Int) = Unit
         override fun onDisplayRemoved(displayId: Int) = Unit
         override fun onDisplayChanged(displayId: Int) = view?.let { view ->
-            if (displayId == this@CameraFragmentX.displayId) {
+            if (displayId == this@XCameraFragment.displayId) {
                 Log.d(TAG, "Rotation changed: ${view.display.rotation}")
                 imageCapture?.targetRotation = view.display.rotation
             }
