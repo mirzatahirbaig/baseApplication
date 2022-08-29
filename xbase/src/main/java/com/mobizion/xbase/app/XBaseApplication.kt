@@ -1,21 +1,24 @@
-package com.mobizion.baseapplication
+package com.mobizion.xbase.app
 
 import android.app.Application
+import com.mobizion.xbase.injection.dependencyModules
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
 /**
  *@Author: Mirza Tahir Baig
  *@Email: tahir@mobizion.com
- *@Date: 27/08/2022
+ *@Date: 29/08/2022
  */
-class App:Application() {
+
+class XBaseApplication:Application() {
 
     override fun onCreate() {
         super.onCreate()
         startKoin {
-            androidContext(this@App)
-            modules(modules)
+            androidContext(this@XBaseApplication)
+            modules(dependencyModules)
         }
     }
+
 }

@@ -6,17 +6,8 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2604166666666667" />
         <entry key="app/src/main/res/layout/fragment_blank.xml" value="0.2604166666666667" />
         <entry key="base/src/main/res/layout/dialog_progress.xml" value="0.2604166666666667" />
-        <entry key="camera/src/main/res/drawable/ic_back.xml" value="0.232" />
-        <entry key="camera/src/main/res/drawable/ic_camera.xml" value="0.232" />
-        <entry key="camera/src/main/res/drawable/ic_flash_off.xml" value="0.232" />
-        <entry key="camera/src/main/res/drawable/ic_flash_on_inner.xml" value="0.232" />
-        <entry key="camera/src/main/res/drawable/ic_shutter.xml" value="0.232" />
-        <entry key="camera/src/main/res/drawable/ic_shutter_focused.xml" value="0.232" />
-        <entry key="camera/src/main/res/drawable/ic_shutter_normal.xml" value="0.232" />
-        <entry key="camera/src/main/res/drawable/ic_shutter_pressed.xml" value="0.232" />
-        <entry key="camera/src/main/res/layout/activity_xcamera.xml" value="0.13333333333333333" />
-        <entry key="camera/src/main/res/layout/fragment_camera.xml" value="0.22871376811594202" />
-        <entry key="camera/src/main/res/layout/ic_flash_on_inner.xml" value="0.22871376811594202" />
+        <entry key="camera/src/main/res/layout/activity_xcamera.xml" value="0.2598958333333333" />
+        <entry key="camera/src/main/res/layout/fragment_camera.xml" value="0.2598958333333333" />
         <entry key="gallary/src/main/res/drawable/checkbox_selected.xml" value="0.1435" />
         <entry key="gallary/src/main/res/drawable/drawable.xml" value="0.1435" />
         <entry key="gallary/src/main/res/layout/layout_pdf_item.xml" value="0.13333333333333333" />

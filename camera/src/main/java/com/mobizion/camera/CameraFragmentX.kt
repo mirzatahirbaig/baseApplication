@@ -11,19 +11,20 @@ import android.hardware.display.DisplayManager
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
-import android.provider.MediaStore
 import android.util.Log
-import android.view.*
+import android.view.KeyEvent
+import android.view.LayoutInflater
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.window.layout.WindowMetricsCalculator
 import com.bumptech.glide.Glide
-import com.mobizion.base.extension.enabled
-import com.mobizion.base.extension.visible
-import com.mobizion.base.fragment.BaseFragment
 import com.mobizion.camera.databinding.FragmentCameraBinding
-import org.koin.android.ext.android.inject
+import com.mobizion.xbase.fragment.XBaseFragment
+import com.mobizion.xutils.enabled
+import com.mobizion.xutils.visible
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -32,24 +33,19 @@ import java.util.concurrent.Executors
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
-import androidx.window.layout.WindowMetricsCalculator
-import com.mobizion.camera.abstract.CameraRepo
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class CameraFragment : BaseFragment<FragmentCameraBinding>(FragmentCameraBinding::inflate) {
+class CameraFragmentX : XBaseFragment<FragmentCameraBinding>(FragmentCameraBinding::inflate) {
 
     private var lensFacing: Int = CameraSelector.LENS_FACING_FRONT
     private var preview: Preview? = null
     private var imageCapture: ImageCapture? = null
     private var camera: Camera? = null
     private var cameraProvider: ProcessCameraProvider? = null
+
     //    private lateinit var windowManager: WindowManager
     private var displayId: Int = -1
     private lateinit var broadcastManager: LocalBroadcastManager
-    private lateinit var cameraSelector:CameraSelector
+    private lateinit var cameraSelector: CameraSelector
     private var flashMode = false
     var isSubmitted = false
     private val imageCaptureDoneViewModel: CameraViewModel by sharedViewModel()
@@ -81,7 +77,7 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(FragmentCameraBinding
         override fun onDisplayAdded(displayId: Int) = Unit
         override fun onDisplayRemoved(displayId: Int) = Unit
         override fun onDisplayChanged(displayId: Int) = view?.let { view ->
-            if (displayId == this@CameraFragment.displayId) {
+            if (displayId == this@CameraFragmentX.displayId) {
                 Log.d(TAG, "Rotation changed: ${view.display.rotation}")
                 imageCapture?.targetRotation = view.display.rotation
             }
@@ -90,44 +86,48 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(FragmentCameraBinding
 
 
     override fun onViewCreated() {
+        permissionViewModel.singlePermissionStatus.observe {
+            if (it){
+                // Initialize our background executor
+                cameraExecutor = Executors.newSingleThreadExecutor()
 
-        // Initialize our background executor
-        cameraExecutor = Executors.newSingleThreadExecutor()
+                broadcastManager = LocalBroadcastManager.getInstance(requireContext())
 
-        broadcastManager = LocalBroadcastManager.getInstance(requireContext())
+                // Set up the intent filter that will receive events from our main activity
+                val filter = IntentFilter().apply { addAction(KEY_EVENT_ACTION) }
+                broadcastManager.registerReceiver(volumeDownReceiver, filter)
 
-        // Set up the intent filter that will receive events from our main activity
-        val filter = IntentFilter().apply { addAction(KEY_EVENT_ACTION) }
-        broadcastManager.registerReceiver(volumeDownReceiver, filter)
+                // Every time the orientation of device changes, update rotation for use cases
+                displayManager.registerDisplayListener(displayListener, null)
 
-        // Every time the orientation of device changes, update rotation for use cases
-        displayManager.registerDisplayListener(displayListener, null)
-
-        //Initialize WindowManager to retrieve display metrics
+                //Initialize WindowManager to retrieve display metrics
 //        windowManager = WindowManager(view.context)
 
-        // Wait for the views to be properly laid out
-        binding.cameraPreview.post {
+                // Wait for the views to be properly laid out
+                binding.cameraPreview.post {
 
-            // Keep track of the display in which this view is attached
-            displayId = binding.cameraPreview.display.displayId
+                    // Keep track of the display in which this view is attached
+                    displayId = binding.cameraPreview.display.displayId
 
-            // Build UI controls
-            updateCameraUi()
+                    // Build UI controls
+                    updateCameraUi()
 
-            // Set up the camera and its use cases
-            setUpCamera()
+                    // Set up the camera and its use cases
+                    setUpCamera()
+                }
+            }
+            else{
+                requireActivity().finish()
+            }
         }
-
-
-
     }
+
     //flash light function
-    private fun flashOnButton(mood:Boolean) {
+    private fun flashOnButton(mood: Boolean) {
         if (camera != null) {
             try {
                 val cameraControl = camera!!.cameraControl
-                flashMode=mood
+                flashMode = mood
                 if (mood) {
                     cameraControl.enableTorch(true) // enable torch
                     binding.btnFlashLight.setImageResource(R.drawable.ic_flash_on_inner)
@@ -235,7 +235,8 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(FragmentCameraBinding
             // A variable number of use-cases can be passed here -
             // camera provides access to CameraControl & CameraInfo
             camera = cameraProvider.bindToLifecycle(
-                this, cameraSelector, preview, imageCapture)
+                this, cameraSelector, preview, imageCapture
+            )
 
             // Attach the viewfinder's surface provider to preview use case
             preview?.setSurfaceProvider(binding.cameraPreview.surfaceProvider)
@@ -276,13 +277,25 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(FragmentCameraBinding
             // fahad agr camera on ha tu usy band krna ha
             flashLightOffCameraOn()
             //finish work light
-            binding.btnCameraCapture.setImageDrawable(ContextCompat.getDrawable(requireActivity(),R.drawable.ic_shutter_pressed))
+            binding.btnCameraCapture.setImageDrawable(
+                ContextCompat.getDrawable(
+                    requireActivity(),
+                    R.drawable.ic_shutter_pressed
+                )
+            )
             cameraProvider?.unbind(preview)
             // Get a stable reference of the modifiable image capture use case
             imageCapture?.let { imageCapture ->
 
                 // Create output file to hold the image
-                val photoFile = createFile(File(requireContext().getDir(Environment.DIRECTORY_PICTURES,Context.MODE_PRIVATE).absolutePath))
+                val photoFile = createFile(
+                    File(
+                        requireContext().getDir(
+                            Environment.DIRECTORY_PICTURES,
+                            Context.MODE_PRIVATE
+                        ).absolutePath
+                    )
+                )
 
                 // Setup image capture metadata
                 val metadata = ImageCapture.Metadata().apply {
@@ -340,7 +353,8 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(FragmentCameraBinding
                     binding.root.postDelayed({
                         binding.root.foreground = ColorDrawable(Color.WHITE)
                         binding.root.postDelayed(
-                            { binding.root.foreground = null }, 100)
+                            { binding.root.foreground = null }, 100
+                        )
                     }, 200)
                 }
             }
@@ -367,29 +381,36 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(FragmentCameraBinding
             }
         }
         binding.btnBack.setOnClickListener {
-            backPressed(it)
+            backPressed()
         }
 
     }
-    private  fun flashLightOffCameraOn(){
+
+    private fun flashLightOffCameraOn() {
         // fahad agr camera on ha tu usy band krna ha
         val cameraControl = camera!!.cameraControl
         if (flashMode) {
-            flashMode=false
+            flashMode = false
             cameraControl.enableTorch(false) // disbale torch
             binding.btnFlashLight.setImageResource(R.drawable.ic_flash_off)
         }
         //finish work light
     }
+
     private fun setGalleryThumbnail(file: File) {
         // Run the operations in the view's thread
         binding.btnCameraCapture.post {
             binding.llCamera.visible(false)
             binding.llPhoto.visible(true)
-            binding.btnCameraCapture.setImageDrawable(ContextCompat.getDrawable(requireActivity(),R.drawable.ic_shutter_normal))
+            binding.btnCameraCapture.setImageDrawable(
+                ContextCompat.getDrawable(
+                    requireActivity(),
+                    R.drawable.ic_shutter_normal
+                )
+            )
             Glide.with(requireActivity()).asBitmap().load(file.path).into(binding.previewImage)
             binding.txtCancel.setOnClickListener {
-                cameraProvider?.bindToLifecycle(this,cameraSelector,preview)
+                cameraProvider?.bindToLifecycle(this, cameraSelector, preview)
                 binding.llPhoto.visible(false)
                 binding.llCamera.visible(true)
             }
@@ -422,11 +443,15 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(FragmentCameraBinding
 
         /** Helper function used to create a timestamped file */
         private fun createFile(baseFolder: File) =
-            File(baseFolder, "IMG_${SimpleDateFormat(FILENAME, Locale.US)
-                .format(System.currentTimeMillis())}" + PHOTO_EXTENSION)
+            File(
+                baseFolder, "IMG_${
+                    SimpleDateFormat(FILENAME, Locale.US)
+                        .format(System.currentTimeMillis())
+                }" + PHOTO_EXTENSION
+            )
     }
 
-    override fun backPressed(view: View) {
+    override fun backPressed() {
         requireActivity().finish()
     }
 
