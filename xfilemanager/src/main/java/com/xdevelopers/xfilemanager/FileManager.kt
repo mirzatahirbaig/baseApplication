@@ -12,7 +12,7 @@ import java.util.*
 
 class FileManager(private val context: Context): FileManagerRepo {
 
-    fun fileExists(path: String):Boolean{
+    private fun fileExists(path: String):Boolean{
         val file = File(path)
         return file.exists()
     }
@@ -43,7 +43,7 @@ class FileManager(private val context: Context): FileManagerRepo {
             file.mkdirs()
         }
     }
-    fun getPath(filename: String): Uri? {
+    private fun getPath(filename: String): Uri? {
         return  Uri.parse("${context.getDir(Environment.DIRECTORY_DOCUMENTS, Context.MODE_PRIVATE).absolutePath}/$filename")
     }
     fun removeFile(filename:String, context: Context){
@@ -59,7 +59,7 @@ class FileManager(private val context: Context): FileManagerRepo {
         }
     }
 
-    fun getDocumentDirectory(): String {
+    private fun getDocumentDirectory(): String {
      return context.getDir(Environment.DIRECTORY_DOCUMENTS,Context.MODE_PRIVATE).absolutePath
     }
     fun removeTemplates(){
