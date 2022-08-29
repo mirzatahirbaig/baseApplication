@@ -22,15 +22,12 @@ val repos = module {
     single<GalleryRepository> {
         GalleryRepoImpl(androidApplication().contentResolver)
     }
-    single<CameraRepo>{
-        XCameraActivity()
-    }
 }
 
 val vms = module {
     viewModel {
         GalleryViewModel(get())
-        CameraViewModel(get())
+        CameraViewModel()
     }
 }
 

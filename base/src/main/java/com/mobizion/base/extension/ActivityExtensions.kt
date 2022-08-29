@@ -81,3 +81,14 @@ fun Context.changeLanguage(languageCode:String):ContextWrapper{
     }
     return  ContextWrapper(context)
 }
+
+/**
+ * Start New Activity with animation
+ *
+ * @param activity the destination class name
+ */
+fun <A : Activity> Activity.getIntent(activity: Class<A>,requestCode:Int):Intent {
+    return Intent(this, activity).also {
+        it.putExtra("REQUEST_CODE",requestCode)
+    }
+}

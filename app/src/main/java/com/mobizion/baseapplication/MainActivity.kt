@@ -8,6 +8,7 @@ import android.net.Uri
 import com.mobizion.base.activity.BaseActivity
 import com.mobizion.base.enums.GradientTypes
 import com.mobizion.base.extension.appHasPermission
+import com.mobizion.base.extension.getIntent
 import com.mobizion.base.utils.getGradientDrawable
 import com.mobizion.base.view.model.PermissionsViewModel
 import com.mobizion.baseapplication.databinding.ActivityMainBinding
@@ -28,7 +29,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     override fun initViews() {
         launchStoragePermission()
-        launchCameraPermission()
         permissionVm.storagePermissionStatus.observe {
             if (it){
                 vm.load(MediaType.IMAGES).observe {
@@ -44,12 +44,21 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             gradientType = GradientTypes.RADIAL_GRADIENT
         )
         binding.openCamera.setOnClickListener {
-            permissionVm.cameraPermissionStatus.observe {
-                if (it){
-                    startActivity(Intent(this@MainActivity, XCameraActivity::class.java))
+            launchCameraPermission()
+        }
+        permissionVm.cameraPermissionStatus.observe {
+            if (it){
+                launchActivityForResult.launch(getIntent(XCameraActivity::class.java,1))
+            }
+        }
+
+        permissionVm.activityResult.observe {
+            it.data?.let {  intent ->
+                if (intent.getIntExtra("REQUEST_CODE",0) == 1){
+                    // Means that the results are from camera
+                    val ss = it.data?.data
                 }
             }
-
         }
     }
 

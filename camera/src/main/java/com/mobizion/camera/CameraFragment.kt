@@ -36,6 +36,7 @@ import androidx.window.layout.WindowMetricsCalculator
 import com.mobizion.camera.abstract.CameraRepo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CameraFragment : BaseFragment<FragmentCameraBinding>(FragmentCameraBinding::inflate) {
@@ -51,7 +52,7 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(FragmentCameraBinding
     private lateinit var cameraSelector:CameraSelector
     private var flashMode = false
     var isSubmitted = false
-    private val imageCaptureDoneViewModel: CameraViewModel by viewModel()
+    private val imageCaptureDoneViewModel: CameraViewModel by sharedViewModel()
     private val displayManager by lazy {
         requireContext().getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
     }
@@ -281,7 +282,7 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(FragmentCameraBinding
             imageCapture?.let { imageCapture ->
 
                 // Create output file to hold the image
-                val photoFile = createFile(File(requireContext().getDir(Environment.DIRECTORY_DOCUMENTS,Context.MODE_PRIVATE).absolutePath))
+                val photoFile = createFile(File(requireContext().getDir(Environment.DIRECTORY_PICTURES,Context.MODE_PRIVATE).absolutePath))
 
                 // Setup image capture metadata
                 val metadata = ImageCapture.Metadata().apply {
@@ -396,7 +397,6 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(FragmentCameraBinding
         }
         binding.txtSend.setOnClickListener {
             imageCaptureDoneViewModel.capturedImageUri(Uri.fromFile(file))
-            requireActivity().finish()
         }
     }
 

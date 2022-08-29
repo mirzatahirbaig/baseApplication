@@ -1,13 +1,23 @@
 package com.mobizion.camera
 
 import android.net.Uri
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mobizion.camera.abstract.CameraRepo
 import kotlinx.coroutines.launch
 
-class CameraViewModel(private val repository: CameraRepo): ViewModel() {
+class CameraViewModel: ViewModel() {
+
+    private val _captureImageUri:MutableLiveData<Uri> by lazy {
+        MutableLiveData()
+    }
+
+    val imageUri:LiveData<Uri>
+    get() = _captureImageUri
+
     fun capturedImageUri(path: Uri = Uri.EMPTY) = viewModelScope.launch {
-        repository.cameraCaptureImageUri(path)
+        _captureImageUri.value = path
     }
 }
