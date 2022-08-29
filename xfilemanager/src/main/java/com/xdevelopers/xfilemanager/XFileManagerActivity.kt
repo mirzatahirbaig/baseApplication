@@ -1,11 +1,11 @@
 package com.xdevelopers.xfilemanager
 
-import com.mobizion.base.activity.BaseActivity
+import com.mobizion.xbase.activity.XBaseActivity
 import com.xdevelopers.xfilemanager.databinding.ActivityXfileManagerBinding
 import com.xdevelopers.xfilemanager.viewmodels.FileManagerViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class XFileManagerActivity : BaseActivity<ActivityXfileManagerBinding>(ActivityXfileManagerBinding::inflate) {
+class XFileManagerActivity : XBaseActivity<ActivityXfileManagerBinding>(ActivityXfileManagerBinding::inflate) {
 
     private val fileMangeViewModel: FileManagerViewModel by viewModel()
     var selectDirectory: String = ""

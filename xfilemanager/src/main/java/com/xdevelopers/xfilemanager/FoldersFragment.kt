@@ -1,22 +1,23 @@
 package com.xdevelopers.xfilemanager
 
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
-import com.mobizion.base.fragment.BaseFragment
+import com.mobizion.xbase.fragment.XBaseFragment
 import com.xdevelopers.xfilemanager.adapters.ProjectsAdapter
 import com.xdevelopers.xfilemanager.databinding.FragmentFoldersBinding
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import com.xdevelopers.xfilemanager.viewmodels.FileManagerViewModel
 
-class FoldersFragment: BaseFragment<FragmentFoldersBinding>(FragmentFoldersBinding::inflate) {
+class FoldersFragment: XBaseFragment<FragmentFoldersBinding>(FragmentFoldersBinding::inflate) {
 
     private lateinit var projectsAdapter: ProjectsAdapter
     private val fileMangeViewModel: FileManagerViewModel by sharedViewModel()
     private val args: FoldersFragmentArgs by navArgs()
     override fun onViewCreated() {
-        projectsAdapter = ProjectsAdapter{ media, position ->
+        projectsAdapter = ProjectsAdapter{ media, _ ->
             Toast.makeText(requireContext(), media.title, Toast.LENGTH_SHORT).show()
             findNavController().navigate(FoldersFragmentDirections.actionFoldersFragmentSelf(media.title))
         }

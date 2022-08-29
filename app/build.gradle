@@ -37,6 +37,6 @@ android {
 
 dependencies {
     implementation project(':xbase')
-    implementation project(':gallary')
-    implementation project(':camera')
+    implementation project(':xgallary')
+    implementation project(':xcamera')
 }
