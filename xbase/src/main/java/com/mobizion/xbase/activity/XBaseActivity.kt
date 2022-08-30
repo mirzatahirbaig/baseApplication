@@ -1,6 +1,7 @@
 package com.mobizion.xbase.activity
 
 import android.content.Context
+import android.graphics.Color
 import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
@@ -59,18 +60,16 @@ abstract class XBaseActivity<B : ViewBinding>(val bindingFactory: (LayoutInflate
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            if(shouldHideStatusBar()){
+        if (shouldHideStatusBar()){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 window.decorView.windowInsetsController!!.hide(
                     WindowInsets.Type.statusBars()
                 )
-            }
-        }else{
-            if(shouldHideStatusBar()){
+            }else{
                 requestWindowFeature(Window.FEATURE_NO_TITLE);
                 window.setFlags(
                     WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN)
             }
         }
         setDecorView()
@@ -86,6 +85,7 @@ abstract class XBaseActivity<B : ViewBinding>(val bindingFactory: (LayoutInflate
         if (enableFullScreen()){
             window?.decorView?.systemUiVisibility =
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            window.statusBarColor = Color.TRANSPARENT
             setLightStatusBar(window.decorView, enableLightStatusBar())
         }
     }
