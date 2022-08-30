@@ -73,8 +73,33 @@ abstract class XBaseActivity<B : ViewBinding>(val bindingFactory: (LayoutInflate
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
             }
         }
+        setDecorView()
         setContentView(binding.root)
         initViews()
+    }
+
+    open fun enableFullScreen():Boolean = false
+
+    open fun enableLightStatusBar():Boolean = false
+
+    private fun setDecorView(){
+        if (enableFullScreen()){
+            window?.decorView?.systemUiVisibility =
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            setLightStatusBar(window.decorView, enableLightStatusBar())
+        }
+    }
+
+    private fun setLightStatusBar(view: View, isLight: Boolean) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            var flags = view.systemUiVisibility
+            flags = if (isLight) {
+                flags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            } else {
+                flags and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+            }
+            view.systemUiVisibility = flags
+        }
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
