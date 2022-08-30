@@ -1,5 +1,7 @@
 package com.xdevelopers.xfilemanager
 
+import android.app.Activity
+import android.content.Intent
 import android.widget.Toast
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.navigation.fragment.findNavController
@@ -18,8 +20,14 @@ class FoldersFragment: XBaseFragment<FragmentFoldersBinding>(FragmentFoldersBind
     private val args: FoldersFragmentArgs by navArgs()
     override fun onViewCreated() {
         projectsAdapter = ProjectsAdapter{ media, _ ->
-            Toast.makeText(requireContext(), media.title, Toast.LENGTH_SHORT).show()
-            findNavController().navigate(FoldersFragmentDirections.actionFoldersFragmentSelf(media.title))
+           if (!media.isFile){
+               findNavController().navigate(FoldersFragmentDirections.actionFoldersFragmentSelf(media.title))
+           }else{
+               val intent = Intent()
+               intent.data = media.filePath
+               requireActivity().setResult(Activity.RESULT_OK, intent)
+               requireActivity().finish()
+           }
         }
         binding.projectRecyclerView.layoutManager = GridLayoutManager(requireContext(),3,GridLayoutManager.VERTICAL,false)
         binding.projectRecyclerView.adapter = projectsAdapter

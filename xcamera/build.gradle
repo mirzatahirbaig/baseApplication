@@ -36,6 +36,7 @@ dependencies {
     implementation project(':xbase')
     implementation project(':xutils')
     implementation project(':xgallary')
+    api project(':xcommonlibs')
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     def camerax_version = "1.2.0-beta01"
     implementation "androidx.camera:camera-core:${camerax_version}"
