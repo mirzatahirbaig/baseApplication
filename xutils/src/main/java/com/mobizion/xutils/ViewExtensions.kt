@@ -3,6 +3,7 @@ package com.mobizion.xutils
 import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
 import android.view.View
+import android.view.ViewGroup
 
 /**
  *@Author: Mirza Tahir Baig
@@ -29,4 +30,12 @@ fun View.alpha(alpha:Float) {
 fun View.setBackground(drawable: Drawable,states:Array<IntArray>?,colors:IntArray?){
     background = drawable
     backgroundTintList = ColorStateList(states,colors)
+}
+
+fun View.setMargins(l: Int, t: Int, r: Int, b: Int) {
+    if (layoutParams is ViewGroup.MarginLayoutParams) {
+        val p: ViewGroup.MarginLayoutParams = layoutParams as ViewGroup.MarginLayoutParams
+        p.setMargins(l, t, r, b)
+        requestLayout()
+    }
 }
