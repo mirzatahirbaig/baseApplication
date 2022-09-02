@@ -11,7 +11,6 @@ import com.mobizion.xbaseadapter.viewholder.BaseViewHolder
 import com.xdevelopers.xfilemanager.ProjectDiffUtil
 import com.xdevelopers.xfilemanager.databinding.ProjectItemBinding
 import com.xdevelopers.xfilemanager.model.ProjectItemModel
-import com.xdevelopers.xresources.R
 
 class ProjectsAdapter(private val itemClickListener: OnItemClickedListener<ProjectItemModel>) :
     BaseListAdapter<ProjectItemModel, ProjectDiffUtil>(
