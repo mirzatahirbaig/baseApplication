@@ -49,6 +49,7 @@ class XCameraFragment : XBaseFragment<FragmentCameraBinding>(FragmentCameraBindi
     private val displayManager by lazy {
         requireContext().getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
     }
+    private var filePath = Environment.DIRECTORY_PICTURES
 
     /** Blocking camera operations are performed using this executor */
     private lateinit var cameraExecutor: ExecutorService
@@ -115,6 +116,9 @@ class XCameraFragment : XBaseFragment<FragmentCameraBinding>(FragmentCameraBindi
             else{
                 requireActivity().finish()
             }
+        }
+        imageCaptureDoneViewModel.captureImageDirectory.observe {
+            this.filePath = it
         }
     }
 
@@ -285,12 +289,7 @@ class XCameraFragment : XBaseFragment<FragmentCameraBinding>(FragmentCameraBindi
 
                 // Create output file to hold the image
                 val photoFile = createFile(
-                    File(
-                        requireContext().getDir(
-                            Environment.DIRECTORY_PICTURES,
-                            Context.MODE_PRIVATE
-                        ).absolutePath
-                    )
+                    File(requireContext().getDir(filePath, Context.MODE_PRIVATE).absolutePath)
                 )
 
                 // Setup image capture metadata

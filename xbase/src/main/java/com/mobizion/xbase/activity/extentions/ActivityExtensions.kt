@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.drawable.Drawable
+import android.os.Environment
 import android.view.WindowManager
 import androidx.annotation.AnimRes
 import androidx.appcompat.app.AppCompatActivity
@@ -89,3 +90,13 @@ fun <A : Activity> Activity.getIntent(activity: Class<A>,requestCode:Int):Intent
         it.putExtra("REQUEST_CODE",requestCode)
     }
 }
+
+
+fun <A : Activity> Activity.getIntentWithPath(activity: Class<A>,requestCode:Int, filePath: String = Environment.DIRECTORY_PICTURES):Intent {
+    return Intent(this, activity).also {
+        it.putExtra(X_REQUEST_CODE,requestCode)
+        it.putExtra(X_FILE_DIRECTORY, filePath)
+    }
+}
+const val X_REQUEST_CODE = "x_request_code"
+const val X_FILE_DIRECTORY = "x_file_directory"
