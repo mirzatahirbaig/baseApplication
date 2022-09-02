@@ -41,13 +41,10 @@ class XCameraFragment : XBaseFragment<FragmentCameraBinding>(FragmentCameraBindi
     private var imageCapture: ImageCapture? = null
     private var camera: Camera? = null
     private var cameraProvider: ProcessCameraProvider? = null
-
-    //    private lateinit var windowManager: WindowManager
     private var displayId: Int = -1
     private lateinit var broadcastManager: LocalBroadcastManager
     private lateinit var cameraSelector: CameraSelector
     private var flashMode = false
-    var isSubmitted = false
     private val imageCaptureDoneViewModel: CameraViewModel by sharedViewModel()
     private val displayManager by lazy {
         requireContext().getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
@@ -62,7 +59,7 @@ class XCameraFragment : XBaseFragment<FragmentCameraBinding>(FragmentCameraBindi
             when (intent.getIntExtra(KEY_EVENT_EXTRA, KeyEvent.KEYCODE_UNKNOWN)) {
                 // When the volume down button is pressed, simulate a shutter button click
                 KeyEvent.KEYCODE_VOLUME_DOWN -> {
-//                    binding.btnCameraCapture.simulateClick()
+                    binding.btnCameraCapture.performClick()
                 }
             }
         }
@@ -78,7 +75,6 @@ class XCameraFragment : XBaseFragment<FragmentCameraBinding>(FragmentCameraBindi
         override fun onDisplayRemoved(displayId: Int) = Unit
         override fun onDisplayChanged(displayId: Int) = view?.let { view ->
             if (displayId == this@XCameraFragment.displayId) {
-                Log.d(TAG, "Rotation changed: ${view.display.rotation}")
                 imageCapture?.targetRotation = view.display.rotation
             }
         } ?: Unit
