@@ -1,6 +1,7 @@
 package com.mobizion.xutils
 
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.view.View
 import android.view.ViewGroup
@@ -38,4 +39,12 @@ fun View.setMargins(l: Int, t: Int, r: Int, b: Int) {
         p.setMargins(l, t, r, b)
         requestLayout()
     }
+}
+fun View.selectedState(selectedColor: Int = Color.WHITE, unSelectedColor: Int = Color.WHITE): ColorStateList {
+    return ColorStateList(
+        arrayOf(
+            intArrayOf(android.R.attr.state_selected),
+            intArrayOf(-android.R.attr.state_selected)
+        ), intArrayOf(selectedColor, unSelectedColor)
+    )
 }
