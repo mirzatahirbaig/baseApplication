@@ -21,11 +21,13 @@ fun RecyclerView.setHorizontalLayoutManager() {
     this.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 }
 
-fun RecyclerView.setHorizontalLayoutManager(widthPercentage:Float,reverse:Boolean) {
+fun RecyclerView.setHorizontalLayoutManager(widthPercentage:Float, reverse:Boolean, spacing: Int = 0) {
+    val decoration = SpacesItemDecoration(spacing)
+    this.addItemDecoration(decoration)
     this.layoutManager = object:LinearLayoutManager(context, HORIZONTAL, reverse){
         override fun checkLayoutParams(lp: RecyclerView.LayoutParams?): Boolean {
             lp?.let {
-                it.width = (width*widthPercentage).toInt()
+                it.width = (width*widthPercentage).toInt()-spacing
             }
             return true
         }
@@ -43,3 +45,4 @@ fun RecyclerView.setStackFromEndManager() {
     manager.stackFromEnd = true
     this.layoutManager = manager
 }
+

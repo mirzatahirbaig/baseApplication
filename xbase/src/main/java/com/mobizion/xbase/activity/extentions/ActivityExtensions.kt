@@ -87,9 +87,10 @@ fun Context.changeLanguage(languageCode:String):ContextWrapper{
 
 fun <A : Activity> Activity.getIntent(activity: Class<A>,requestCode:Int):Intent {
     return Intent(this, activity).also {
-        it.putExtra("REQUEST_CODE",requestCode)
+        it.putExtra(X_REQUEST_CODE,requestCode)
     }
 }
+
 
 
 fun <A : Activity> Activity.getIntentWithPath(activity: Class<A>,requestCode:Int, filePath: String = Environment.DIRECTORY_PICTURES):Intent {

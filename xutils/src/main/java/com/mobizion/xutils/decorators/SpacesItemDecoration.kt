@@ -19,11 +19,13 @@ class SpacesItemDecoration(private val mSpace: Int) : RecyclerView.ItemDecoratio
         state: RecyclerView.State
     ) {
         super.getItemOffsets(outRect, view, parent, state)
-        outRect.left = mSpace
-        outRect.right = mSpace
+        outRect.left = mSpace/2
         outRect.bottom = mSpace
         outRect.top = mSpace
 //         Add top margin only for the first item to avoid double space between items
 //        if (parent.getChildAdapterPosition(view) == 0) outRect.top = mSpace
+        if (parent.getChildAdapterPosition(view) != parent.adapter!!.itemCount - 1) {
+            outRect.right = mSpace/2
+        }
     }
 }
