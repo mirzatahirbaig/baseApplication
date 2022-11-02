@@ -5,6 +5,7 @@
     <application>
         <activity
             android:name=".XFileManagerActivity"
+            android:theme="@style/Theme.Design.NoActionBar"
             android:exported="false" />
     </application>
 
