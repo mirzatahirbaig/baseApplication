@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
+import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.mobizion.xbase.view.model.PermissionViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -50,7 +51,7 @@ abstract class XBaseFragment<B : ViewBinding>(val bindingFactory: (LayoutInflate
                     backPressed()
                 }
             }
-        requireActivity().onBackPressedDispatcher.addCallback(requireActivity(), callback)
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -59,7 +60,7 @@ abstract class XBaseFragment<B : ViewBinding>(val bindingFactory: (LayoutInflate
     }
 
     open fun backPressed(){
-
+        findNavController().popBackStack()
     }
 
     abstract fun onViewCreated()
