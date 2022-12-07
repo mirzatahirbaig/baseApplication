@@ -1,9 +1,12 @@
 package com.mobizion.xutils
 
 import android.content.Context
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import androidx.annotation.*
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 
 /**
  *@Author: Mirza Tahir Baig
@@ -33,4 +36,15 @@ fun Context.getColour(@ColorRes colorId: Int): Int {
 
 fun Context.getIntArray(@ArrayRes arrayId: Int): IntArray {
     return resources.getIntArray(arrayId)
+}
+fun Context.getResFontId(name: String): Int {
+    return resources.getIdentifier(
+        name, "font",
+        packageName
+    )
+}
+
+fun Drawable.setImageColor(color: Int){
+    val wrappedDrawable: Drawable = DrawableCompat.wrap(this)
+    DrawableCompat.setTint(wrappedDrawable, color)
 }
