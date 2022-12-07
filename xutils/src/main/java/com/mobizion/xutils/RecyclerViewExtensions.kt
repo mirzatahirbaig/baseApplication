@@ -28,6 +28,7 @@ fun RecyclerView.setHorizontalLayoutManager(widthPercentage:Float, reverse:Boole
         override fun checkLayoutParams(lp: RecyclerView.LayoutParams?): Boolean {
             lp?.let {
                 it.width = (width*widthPercentage).toInt()-spacing
+                it.height = (height*widthPercentage).toInt()
             }
             return true
         }

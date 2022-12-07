@@ -1,15 +1,16 @@
 package com.mobizion.baseapplication
 
 import android.content.ContentResolver
+import android.content.Intent.getIntent
 import android.database.ContentObserver
 import android.net.Uri
+import android.view.View.inflate
 import com.mobizion.baseapplication.databinding.ActivityMainBinding
 import com.mobizion.camera.XCameraActivity
 import com.mobizion.gallary.enum.MediaType
 import com.mobizion.gallary.enum.SortOrder
 import com.mobizion.gallary.view.model.GalleryViewModel
 import com.mobizion.xbase.activity.XBaseActivity
-import com.mobizion.xbase.activity.extentions.getIntent
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.context.loadKoinModules
 
@@ -23,7 +24,7 @@ class MainActivity : XBaseActivity<ActivityMainBinding>(ActivityMainBinding::inf
     override fun initViews() {
         loadKoinModules(listOf(repos, vms))
         binding.openCamera.setOnClickListener {
-            launchActivityForResult.launch(getIntent(XCameraActivity::class.java,1))
+            launchActivityForResult.launch(getIntent(XCameraActivity::class.java, 1))
         }
 
         permissionViewModel.activityResult.observe {

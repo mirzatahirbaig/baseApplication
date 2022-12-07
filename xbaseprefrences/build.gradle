@@ -4,11 +4,12 @@ plugins {
 }
 
 android {
-    compileSdk 33
+    compileSdk 32
 
     defaultConfig {
         minSdk 21
-        targetSdk 33
+        targetSdk 32
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
@@ -23,20 +24,15 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    buildFeatures{
-        viewBinding true
-    }
     kotlinOptions {
         jvmTarget = '1.8'
     }
 }
 
 dependencies {
-    api "androidx.core:core-ktx:1.8.0"
-    api "androidx.appcompat:appcompat:1.5.1"
-    api "com.google.android.material:material:1.6.1"
-    api "androidx.navigation:navigation-dynamic-features-fragment:2.5.2"
-    api "io.insert-koin:koin-android:3.1.5"
-    // Koin Test features
-    testApi "io.insert-koin:koin-test:3.1.5"
+    api project(':xcommonlibs')
+    implementation "io.insert-koin:koin-android:3.1.5"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.1"
+    api "androidx.datastore:datastore-preferences:1.0.0"
 }

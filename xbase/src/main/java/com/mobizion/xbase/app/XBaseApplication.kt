@@ -11,7 +11,7 @@ import org.koin.core.context.startKoin
  *@Date: 29/08/2022
  */
 
-open class XBaseApplication:Application() {
+open class XBaseApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()

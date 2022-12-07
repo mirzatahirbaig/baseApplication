@@ -40,6 +40,7 @@ fun View.setMargins(l: Int, t: Int, r: Int, b: Int) {
         requestLayout()
     }
 }
+
 fun View.selectedState(selectedColor: Int = Color.WHITE, unSelectedColor: Int = Color.WHITE): ColorStateList {
     return ColorStateList(
         arrayOf(
@@ -48,3 +49,6 @@ fun View.selectedState(selectedColor: Int = Color.WHITE, unSelectedColor: Int = 
         ), intArrayOf(selectedColor, unSelectedColor)
     )
 }
+
+fun View.getStatusBarHeight():Int = context.getStatusBarHeight()
+
