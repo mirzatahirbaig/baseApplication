@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    id 'maven-publish'
 }
 
 android {
@@ -29,14 +30,39 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+            withJavadocJar()
+        }
+    }
+
 }
 
 dependencies {
     api "androidx.core:core-ktx:1.8.0"
     api "androidx.appcompat:appcompat:1.5.1"
-    api "com.google.android.material:material:1.6.1"
+    api "com.google.android.material:material:1.7.0"
     api "androidx.navigation:navigation-dynamic-features-fragment:2.5.2"
     api "io.insert-koin:koin-android:3.1.5"
     // Koin Test features
     testApi "io.insert-koin:koin-test:3.1.5"
+    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+}
+
+publishing {
+
+    publications {
+
+        release(MavenPublication) {
+            groupId = 'com.github.mirzatahirbaig'
+            artifactId = 'xbase'
+            version = '0.1'
+
+            afterEvaluate {
+                from components.release
+            }
+        }
+    }
 }
