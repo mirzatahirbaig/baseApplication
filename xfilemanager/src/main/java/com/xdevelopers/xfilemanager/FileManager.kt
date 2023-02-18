@@ -115,6 +115,14 @@ class FileManager(private val context: Context): FileManagerRepo {
         }
     }
 
+    override suspend fun createNewFolder(name: String?) {
+        val newPath = getDocumentDirectory()
+        val file = File("$newPath/$name")
+        if(!fileExists(file.absolutePath)){
+            file.mkdirs()
+        }
+    }
+
     override suspend fun createAllProjects(folderName: String): List<ProjectItemModel> {
         var file = File(getDocumentDirectory())
         if (folderName.isNotEmpty()){
@@ -123,7 +131,9 @@ class FileManager(private val context: Context): FileManagerRepo {
         val directories = mutableListOf<ProjectItemModel>()
         file.listFiles()?.let {
             for (f in it){
-                directories.add(ProjectItemModel(f.name, f.isFile, Uri.fromFile(f)))
+                if (!f.isHidden){
+                    directories.add(ProjectItemModel(f.name, f.isFile, Uri.fromFile(f)))
+                }
             }
         }
         return directories

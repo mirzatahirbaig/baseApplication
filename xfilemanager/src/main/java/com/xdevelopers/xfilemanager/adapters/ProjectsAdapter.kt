@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.mobizion.xbaseadapter.adapter.BaseListAdapter
 import com.mobizion.xbaseadapter.listeners.OnItemClickedListener
 import com.mobizion.xbaseadapter.viewholder.BaseViewHolder
@@ -40,9 +41,19 @@ class ProjectsAdapter(private val itemClickListener: OnItemClickedListener<Proje
         override fun bind(item: ProjectItemModel, position: Int) {
             binding.projectNameTextView.text = item.title
             if (item.isFile){
-                Glide.with(binding.root.context).asBitmap().load(item.filePath).into(binding.imageView)
+                Glide.with(binding.root.context)
+                    .asBitmap().load(item.filePath)
+                    .skipMemoryCache(true)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .into(binding.imageView)
+
             }else{
-                binding.imageView.setImageDrawable(ContextCompat.getDrawable(binding.root.context, com.xdevelopers.xfilemanager.R.drawable.folder_image))
+                binding.imageView.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        binding.root.context,
+                        com.xdevelopers.xfilemanager.R.drawable.folder_image
+                    )
+                )
             }
             binding.root.setOnClickListener {
                 itemClickListener.onItemClicked(item, position)

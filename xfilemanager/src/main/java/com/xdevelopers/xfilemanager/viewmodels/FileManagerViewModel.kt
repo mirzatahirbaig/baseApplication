@@ -21,5 +21,10 @@ class FileManagerViewModel(private val repository: FileManagerRepo): ViewModel()
         repository.createProject("$path/"+UUID.randomUUID().toString())
         getAllProjects("$path/")
     }
+
     fun createFileWithProject() = repository.createFileWithProject().asLiveData()
+
+    fun createNewFolder(path: String = "", name: String) = viewModelScope.launch {
+        repository.createNewFolder("$path/$name")
+    }
 }

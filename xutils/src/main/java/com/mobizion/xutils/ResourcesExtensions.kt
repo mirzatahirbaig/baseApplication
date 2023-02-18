@@ -43,7 +43,19 @@ fun Context.getResFontId(name: String): Int {
         packageName
     )
 }
+fun Context.getResDrawableId(name: String): Int {
+    return resources.getIdentifier(
+        name, "drawable",
+        packageName
+    )
+}
 
+fun Context.getXResDrawableId(name: String): Int {
+    return resources.getIdentifier(
+        name, "drawable",
+        "com.xdevelopers.xresources"
+    )
+}
 fun Drawable.setImageColor(color: Int){
     val wrappedDrawable: Drawable = DrawableCompat.wrap(this)
     DrawableCompat.setTint(wrappedDrawable, color)
