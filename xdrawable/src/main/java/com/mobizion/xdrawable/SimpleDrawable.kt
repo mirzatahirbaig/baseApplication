@@ -1,7 +1,10 @@
 package com.mobizion.xdrawable
 
-import android.graphics.Color
+import android.content.res.Resources
+import android.graphics.*
 import android.graphics.drawable.GradientDrawable
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
+import androidx.core.graphics.drawable.toBitmap
 import com.mobizion.xutils.dp
 
 /**
@@ -32,6 +35,7 @@ fun getDrawable(
             bottomLeft,
             bottomLeft
         )
+
     }
 
 fun getFilledDrawable(

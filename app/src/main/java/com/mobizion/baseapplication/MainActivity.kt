@@ -24,7 +24,7 @@ class MainActivity : XBaseActivity<ActivityMainBinding>(ActivityMainBinding::inf
     override fun initViews() {
         loadKoinModules(listOf(repos, vms))
         binding.openCamera.setOnClickListener {
-            launchActivityForResult.launch(getIntent(XCameraActivity::class.java, 1))
+//            launchActivityForResult.launch(getIntent(XCameraActivity::class.java, 1))
         }
 
         permissionViewModel.activityResult.observe {
