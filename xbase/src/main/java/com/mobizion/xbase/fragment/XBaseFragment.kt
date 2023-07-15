@@ -1,14 +1,18 @@
 package com.mobizion.xbase.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
+import com.mobizion.xbase.activity.XBaseActivityResult
 import com.mobizion.xbase.view.model.PermissionViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -19,6 +23,15 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
  */
 abstract class XBaseFragment<B : ViewBinding>(val bindingFactory: (LayoutInflater, ViewGroup?, Boolean) -> B) :
     Fragment()  {
+
+    val activityLauncher: XBaseActivityResult<Intent, ActivityResult> =
+        XBaseActivityResult.registerForActivityResult(this, ActivityResultContracts.StartActivityForResult())
+
+    val permissionLauncher: XBaseActivityResult<String, Boolean> =
+        XBaseActivityResult.registerForActivityResult(this, ActivityResultContracts.RequestPermission())
+
+    val permissionsLauncher: XBaseActivityResult<Array<String>, Map<String, Boolean>> =
+        XBaseActivityResult.registerForActivityResult(this, ActivityResultContracts.RequestMultiplePermissions())
 
     lateinit var binding: B
     lateinit var mInflater: LayoutInflater

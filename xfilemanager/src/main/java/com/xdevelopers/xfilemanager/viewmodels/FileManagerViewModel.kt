@@ -1,5 +1,6 @@
 package com.xdevelopers.xfilemanager.viewmodels
 
+import android.graphics.Bitmap
 import android.net.Uri
 import androidx.lifecycle.*
 import com.xdevelopers.xfilemanager.model.ProjectItemModel
@@ -27,4 +28,23 @@ class FileManagerViewModel(private val repository: FileManagerRepo): ViewModel()
     fun createNewFolder(path: String = "", name: String) = viewModelScope.launch {
         repository.createNewFolder("$path/$name")
     }
+
+    private val _fileUri: MutableLiveData<Uri> by lazy {
+        MutableLiveData()
+    }
+    val fileUri: LiveData<Uri?> get() = _fileUri
+
+    fun createFile(fileName: String?, uri: Uri) = viewModelScope.launch {
+        _fileUri.value = repository.createFile(fileName, uri)
+    }
+    private val _fileUpdatedUri: MutableLiveData<Uri> by lazy {
+        MutableLiveData()
+    }
+    val fileUpdatedUri: LiveData<Uri?> get() = _fileUri
+
+    fun updateFile(bitmap: Bitmap, uri: Uri) = viewModelScope.launch {
+        _fileUpdatedUri.value = repository.updateFile(bitmap, uri)
+    }
+
+
 }

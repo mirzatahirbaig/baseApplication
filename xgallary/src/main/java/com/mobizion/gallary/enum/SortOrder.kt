@@ -1,4 +1,4 @@
-package com.mobizion.gallary.enum
+package com.mobizion.hiddlegallery.enum
 
 /**
  *@Author: Mirza Tahir Baig

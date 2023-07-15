@@ -16,6 +16,7 @@
 package com.mobizion.xutils
 
 import android.app.Activity
+import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
@@ -23,6 +24,10 @@ import android.media.ExifInterface
 import android.opengl.GLException
 import android.opengl.GLSurfaceView
 import android.os.Environment
+import android.renderscript.Allocation
+import android.renderscript.Element.U8_4
+import android.renderscript.RenderScript
+import android.renderscript.ScriptIntrinsicConvolve3x3
 import android.util.Log
 import android.view.View
 import android.widget.EditText
@@ -625,6 +630,66 @@ class BitmapUtils {
             }
             return Bitmap.createBitmap(bitmapSource, w, h, Bitmap.Config.ARGB_8888)
         }
+
+        fun refineBitmapEdges(context: Context, sourceBitmap: Bitmap): Bitmap {
+            // Create an empty destination bitmap with the same dimensions
+            val destBitmap = Bitmap.createBitmap(sourceBitmap.width, sourceBitmap.height, Bitmap.Config.ARGB_8888)
+
+            // Create a RenderScript context
+            val rs = RenderScript.create(context)
+
+            // Create an allocation for the source and destination bitmaps
+            val sourceAllocation = Allocation.createFromBitmap(rs, sourceBitmap)
+            val destAllocation = Allocation.createFromBitmap(rs, destBitmap)
+
+            // Create a script for applying the convolution matrix
+            val convolutionScript = ScriptIntrinsicConvolve3x3.create(rs, U8_4(rs))
+
+            // Define the convolution matrix for edge refinement
+            val kernel = floatArrayOf(
+                -1f, -1f, -1f,
+                -1f, 8f, -1f,
+                -1f, -1f, -1f
+            )
+            convolutionScript.setCoefficients(kernel)
+
+            // Apply the convolution to refine the edges
+            convolutionScript.setInput(sourceAllocation)
+            convolutionScript.forEach(destAllocation)
+
+            // Copy the processed bitmap to the destination bitmap
+            destAllocation.copyTo(destBitmap)
+
+            // Destroy the RenderScript context to release resources
+            rs.destroy()
+
+            return destBitmap
+        }
+        fun smoothEdges(bitmap: Bitmap, radius: Float): Bitmap {
+            // Create a new bitmap with the same dimensions as the input bitmap
+            val smoothedBitmap = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
+
+            // Create a canvas to draw on the new bitmap
+            val canvas = Canvas(smoothedBitmap)
+
+            // Create a paint object
+            val paint = Paint().apply {
+                isAntiAlias = true
+                shader = BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+            }
+
+            // Create a rectangle to define the bounds of the bitmap
+            val rect = RectF(0f, 0f, bitmap.width.toFloat(), bitmap.height.toFloat())
+
+            // Draw the bitmap on the canvas with the paint object
+            canvas.drawRoundRect(rect, radius, radius, paint)
+
+            // Return the smoothed bitmap
+            return smoothedBitmap
+        }
+
+
+
     }
 
 }

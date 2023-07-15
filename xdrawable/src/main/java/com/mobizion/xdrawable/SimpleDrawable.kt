@@ -1,7 +1,13 @@
 package com.mobizion.xdrawable
 
-import android.graphics.Color
+import android.content.res.ColorStateList
+import android.content.res.Resources
+import android.graphics.*
 import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.LayerDrawable
+import android.graphics.drawable.RippleDrawable
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
+import androidx.core.graphics.drawable.toBitmap
 import com.mobizion.xutils.dp
 
 /**
@@ -32,6 +38,7 @@ fun getDrawable(
             bottomLeft,
             bottomLeft
         )
+
     }
 
 fun getFilledDrawable(
@@ -59,3 +66,17 @@ fun getBorderedDrawable(
     bottomRight = radius,
     bottomLeft = radius
 )
+fun getDrawableWithRipple(
+    borderColor: Int,
+    borderWidth: Int = 0,
+    fillColor: Int = Color.WHITE,
+    radius: Float = 0f,
+    rippleColor: Int = Color.WHITE,
+): LayerDrawable{
+    val bgLayer = getBorderedDrawable(borderColor, borderWidth, fillColor, radius)
+ return LayerDrawable(arrayOf(
+     bgLayer,
+     RippleDrawable(ColorStateList.valueOf(rippleColor), bgLayer, null)
+ ))
+}
+
