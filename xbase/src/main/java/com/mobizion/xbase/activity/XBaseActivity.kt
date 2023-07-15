@@ -37,6 +37,18 @@ abstract class XBaseActivity<B : ViewBinding>(val bindingFactory: (LayoutInflate
         permissionViewModel.setSinglePermissionStatus(granted)
     }
 
+    val permissionsLauncher: XBaseActivityResult<Array<String>, Map<String, Boolean>> =
+        XBaseActivityResult.registerForActivityResult(
+            this,
+            ActivityResultContracts.RequestMultiplePermissions()
+        )
+
+    val permissionLauncher: XBaseActivityResult<String, Boolean> =
+        XBaseActivityResult.registerForActivityResult(
+            this,
+            ActivityResultContracts.RequestPermission()
+        )
+
     val binding: B by lazy { bindingFactory(layoutInflater) }
 
     /**

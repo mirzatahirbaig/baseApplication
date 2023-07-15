@@ -1,8 +1,8 @@
 package com.mobizion.gallary.repository.abstraction
 
 import com.mobizion.gallary.enum.MediaType
-import com.mobizion.gallary.enum.SortOrder
-import com.mobizion.gallary.models.GalleryMedia
+import com.mobizion.hiddlegallery.enum.SortOrder
+import com.mobizion.gallary.DeviceMedia
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -12,6 +12,6 @@ import kotlinx.coroutines.flow.Flow
  */
 interface GalleryRepository {
 
-    fun load(type: MediaType,order: SortOrder): Flow<List<GalleryMedia>>
+    fun load(type: MediaType, order: SortOrder): Flow<List<DeviceMedia>>
 
 }

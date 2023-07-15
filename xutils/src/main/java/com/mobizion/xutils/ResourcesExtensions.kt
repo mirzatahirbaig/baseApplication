@@ -2,7 +2,9 @@ package com.mobizion.xutils
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
+import android.widget.ImageView
 import androidx.annotation.*
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
@@ -59,4 +61,15 @@ fun Context.getXResDrawableId(name: String): Int {
 fun Drawable.setImageColor(color: Int){
     val wrappedDrawable: Drawable = DrawableCompat.wrap(this)
     DrawableCompat.setTint(wrappedDrawable, color)
+}
+
+fun ImageView.setXImage(@DrawableRes drawableId: Int, color: Int? = null, colorId: Int? = null){
+    setImageDrawable(ContextCompat.getDrawable(context, drawableId)?.also { draw ->
+        color?.let {
+            draw.setColorFilter(it, PorterDuff.Mode.SRC_ATOP)
+        }
+        colorId?.let {
+            draw.setColorFilter(ContextCompat.getColor(context, it), PorterDuff.Mode.SRC_ATOP)
+        }
+    })
 }

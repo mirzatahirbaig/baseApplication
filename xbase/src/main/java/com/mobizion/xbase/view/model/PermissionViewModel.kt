@@ -1,8 +1,11 @@
 package com.mobizion.xbase.view.model
 
+import android.app.Activity
 import androidx.activity.result.ActivityResult
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
@@ -39,10 +42,15 @@ class PermissionViewModel:ViewModel() {
         MutableLiveData()
     }
 
-    val activityResult: LiveData<ActivityResult>
+    val activityResult: LiveData<ActivityResult?>
         get() = _activityResult
 
     fun setActivityResult(result: ActivityResult) = viewModelScope.launch {
         _activityResult.value = result
     }
+
+    fun resetValue() {
+        _activityResult.value = null
+    }
+
 }

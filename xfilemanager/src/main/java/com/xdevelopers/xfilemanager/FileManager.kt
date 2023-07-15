@@ -1,14 +1,33 @@
 package com.xdevelopers.xfilemanager
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
+import android.provider.MediaStore
+import android.util.Log
+import android.webkit.MimeTypeMap
+import com.blankj.utilcode.util.LogUtils
 import com.xdevelopers.xfilemanager.abstract.FileManagerRepo
 import com.xdevelopers.xfilemanager.model.ProjectItemModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import java.io.*
-import java.util.*
+import kotlinx.coroutines.withContext
+import java.io.BufferedInputStream
+import java.io.BufferedOutputStream
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.OutputStream
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.UUID
 
 class FileManager(private val context: Context): FileManagerRepo {
 
@@ -106,7 +125,6 @@ class FileManager(private val context: Context): FileManagerRepo {
         }
         return file.absolutePath
     }
-
     override suspend fun createProject(name: String?) {
         val newPath = getDocumentDirectory()
         val file = File("$newPath/$name")
@@ -121,6 +139,37 @@ class FileManager(private val context: Context): FileManagerRepo {
         if(!fileExists(file.absolutePath)){
             file.mkdirs()
         }
+    }
+
+    override suspend fun createFile(name: String?, uri: Uri): Uri? {
+        var fileName = createFileName()
+        name?.let { fileName = it }
+        val filePath = File(getDocumentDirectory(), "$fileName.jpg")
+        withContext(Dispatchers.IO) {
+            var outputStream: OutputStream? = null
+            try {
+                outputStream = FileOutputStream(filePath)
+
+               if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    val source = ImageDecoder.createSource(context.contentResolver, uri)
+                    ImageDecoder.decodeBitmap(source).compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+                } else {
+                    MediaStore.Images.Media.getBitmap(context.contentResolver, uri).compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+                }
+
+                return@withContext Uri.fromFile(filePath)
+            } catch (e: IOException) {
+                LogUtils.e(e)
+                return@withContext null
+            } finally {
+                try {
+                    outputStream?.close()
+                } catch (e: IOException) {
+                    return@withContext null
+                }
+            }
+        }
+        return Uri.fromFile(filePath)
     }
 
     override suspend fun createAllProjects(folderName: String): List<ProjectItemModel> {
@@ -139,9 +188,42 @@ class FileManager(private val context: Context): FileManagerRepo {
         return directories
     }
 
+    override suspend fun updateFile(bitmap: Bitmap, uri: Uri): Uri? {
+        withContext(Dispatchers.IO) {
+            try {
+                val out = context.contentResolver.openOutputStream(uri)
+                val stream = ByteArrayOutputStream()
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+                out?.write(stream.toByteArray())
+                out?.close()
+                return@withContext uri
+            } catch (e: IOException) {
+                e.printStackTrace()
+                return@withContext null
+            }
+        }
+        return null
+    }
+
     override fun createFileWithProject(): Flow<Uri> {
        val newProjectPath = createDirectory(UUID.randomUUID().toString())
         val file = File("$newProjectPath/${System.currentTimeMillis()}.png")
         return flow { emit(Uri.fromFile(file)) }
+    }
+
+    private fun createFileName(): String {
+        val dateFormat = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault())
+        val currentDate = Date()
+        return dateFormat.format(currentDate)
+    }
+
+    private fun getFileExtension(uri: Uri): String? {
+        val contentResolver = context.contentResolver
+
+        // Get the file type from the content resolver
+        val mimeType = contentResolver.getType(uri)
+
+        // Return the file extension from the mimeType
+        return MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
     }
 }

@@ -1,4 +1,4 @@
-package com.mobizion.gallary.extensions
+package com.mobizion.hiddlegallery.extension
 
 import android.annotation.SuppressLint
 import android.content.ContentResolver
