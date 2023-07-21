@@ -41,6 +41,7 @@
             android:gravity="center"
             android:textSize="@dimen/_12ssp"
             android:padding="@dimen/_5sdp"
+            android:textColor="@color/red"
             android:text="Photocut needs to access to your photos to change your profile picture, send photos. Please allow access."
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
