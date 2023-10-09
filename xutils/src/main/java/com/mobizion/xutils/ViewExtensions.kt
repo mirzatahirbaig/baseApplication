@@ -52,3 +52,40 @@ fun View.selectedState(selectedColor: Int = Color.WHITE, unSelectedColor: Int = 
 
 fun View.getStatusBarHeight():Int = context.getStatusBarHeight()
 
+/**
+ *  methood to update the view size according to design screen ratio in the device app
+ * @Param widthFactor will use to update the width of the view
+ * @Param heightFactor Factor will use to update the height of the view
+ */
+
+fun ImageView.updateSize(widthFactor:Float,heightFactor: Float){
+    val displayMetrics: DisplayMetrics = context.resources.displayMetrics
+    val screenWidth = displayMetrics.widthPixels
+    val screenHeight = displayMetrics.heightPixels
+    val desiredWidth = (screenWidth * widthFactor).toInt()
+    val desiredHeight = (screenHeight *heightFactor).toInt()
+    val params = layoutParams
+    params.width = desiredWidth
+    params.height = desiredHeight
+    layoutParams = params
+}
+
+/**
+ * this method is specifically used to update the height of bottom view in chat screen
+ * when keyboard is appear and disappear
+ */
+
+fun View.updateHeight(heightFactor: Float,keyboardHeight:Int = 0){
+    val displayMetrics: DisplayMetrics = context.resources.displayMetrics
+    val screenHeight = displayMetrics.heightPixels
+    val desiredHeight = if (keyboardHeight == 0){
+        (screenHeight *heightFactor).toInt()
+    }else{
+        val newHeight = screenHeight - keyboardHeight
+        (newHeight *heightFactor).toInt()
+    }
+    val params = layoutParams
+    params.height = desiredHeight
+    layoutParams = params
+    requestLayout()
+}

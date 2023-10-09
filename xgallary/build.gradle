@@ -38,7 +38,6 @@ dependencies {
     implementation project(':xbaseadapter')
     implementation project(':xcommonlibs')
     implementation project(':xutils')
-    implementation project(':xresource')
     implementation project(':xdrawable')
     def lifecycle_version = "2.5.1"
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
